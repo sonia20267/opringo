@@ -2,25 +2,18 @@ import { Network } from '@capacitor/network';
 import { Preferences } from '@capacitor/preferences';
 
 const OPRINGO_URL = 'https://www.opringo.com/index';
-
 const OPRINGO_INITIALIZED_KEY = 'opringo_initialized';
 
 async function launchOpringo() {
 
     try {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Check whether Opringo has successfully loaded before
-        |--------------------------------------------------------------------------
-        */
-
+        // Check whether Opringo has been opened successfully before
         const stored = await Preferences.get({
             key: OPRINGO_INITIALIZED_KEY
         });
 
         const hasLoadedBefore = stored.value === 'true';
-
 
         console.log(
             '[Opringo] Loaded before:',
@@ -28,12 +21,7 @@ async function launchOpringo() {
         );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Check device network
-        |--------------------------------------------------------------------------
-        */
-
+        // Check network
         const network = await Network.getStatus();
 
         console.log(
@@ -42,87 +30,51 @@ async function launchOpringo() {
         );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | OFFLINE
-        |--------------------------------------------------------------------------
-        */
+        // ---------------------------------------------------------
+        // OFFLINE
+        // ---------------------------------------------------------
 
         if (!network.connected) {
 
+            console.log('[Opringo] Device is offline');
+
             if (hasLoadedBefore) {
 
-                /*
-                 * We have used Opringo before.
-                 *
-                 * Try opening Opringo so its Service Worker /
-                 * cached resources can handle the request.
-                 */
-
                 console.log(
-                    '[Opringo] Offline - attempting cached Opringo'
+                    '[Opringo] Previous installation detected.'
                 );
 
-                window.location.replace(
-                    OPRINGO_URL
-                );
+                // Let Opringo's service worker/cache try to handle it
+                window.location.replace(OPRINGO_URL);
 
             } else {
 
-                /*
-                 * First launch + offline.
-                 *
-                 * Nothing has been cached yet.
-                 */
-
                 console.log(
-                    '[Opringo] First launch while offline'
+                    '[Opringo] First launch while offline.'
                 );
 
-                window.location.replace(
-                    'offline.html'
-                );
+                window.location.replace('offline.html');
             }
 
             return;
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | ONLINE
-        |--------------------------------------------------------------------------
-        |
-        | Check that Opringo itself is reachable.
-        |
-        */
+        // ---------------------------------------------------------
+        // ONLINE
+        // ---------------------------------------------------------
 
-        const response = await fetch(
-            OPRINGO_URL,
-            {
-                method: 'HEAD',
-                cache: 'no-store'
-            }
+        console.log(
+            '[Opringo] Device is online.'
         );
 
 
-        if (!response.ok) {
-
-            throw new Error(
-                'Opringo returned HTTP ' +
-                response.status
-            );
-        }
-
-
         /*
-        |--------------------------------------------------------------------------
-        | Opringo is reachable
-        |--------------------------------------------------------------------------
-        |
-        | Remember that the app has successfully connected before.
-        |
-        */
+         * We don't use fetch()/HEAD here.
+         *
+         * The browser may reject fetch because of CORS even
+         * though normal navigation to Opringo works.
+         */
 
         await Preferences.set({
             key: OPRINGO_INITIALIZED_KEY,
@@ -131,20 +83,11 @@ async function launchOpringo() {
 
 
         console.log(
-            '[Opringo] Server reachable'
+            '[Opringo] Launching Opringo...'
         );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Launch Opringo
-        |--------------------------------------------------------------------------
-        */
-
-        window.location.replace(
-            OPRINGO_URL
-        );
-
+        window.location.replace(OPRINGO_URL);
 
     } catch (error) {
 
@@ -154,42 +97,43 @@ async function launchOpringo() {
         );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | If Opringo cannot be reached
-        |--------------------------------------------------------------------------
-        */
+        // Try to determine whether Opringo was previously initialized
+        try {
 
-        const stored = await Preferences.get({
-            key: OPRINGO_INITIALIZED_KEY
-        });
+            const stored = await Preferences.get({
+                key: OPRINGO_INITIALIZED_KEY
+            });
 
-        const hasLoadedBefore = stored.value === 'true';
+            const hasLoadedBefore = stored.value === 'true';
 
 
-        if (hasLoadedBefore) {
+            if (hasLoadedBefore) {
 
-            /*
-             * Try Opringo anyway.
-             *
-             * If its Service Worker has cached the page,
-             * it may be able to serve it.
-             */
+                console.log(
+                    '[Opringo] Falling back to cached Opringo.'
+                );
 
-            window.location.replace(
-                OPRINGO_URL
+                window.location.replace(OPRINGO_URL);
+
+            } else {
+
+                console.log(
+                    '[Opringo] Falling back to offline page.'
+                );
+
+                window.location.replace('offline.html');
+            }
+
+        } catch (fallbackError) {
+
+            console.error(
+                '[Opringo] Fallback error:',
+                fallbackError
             );
 
-        } else {
-
-            window.location.replace(
-                'offline.html'
-            );
-
+            window.location.replace('offline.html');
         }
-
     }
-
 }
 
 
