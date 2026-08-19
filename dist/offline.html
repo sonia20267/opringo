@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Opringo - Offline</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+
+            background: #09090b;
+            color: white;
+
+            font-family:
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                sans-serif;
+
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        h1 {
+            margin-bottom: 12px;
+            font-size: 28px;
+        }
+
+        p {
+            color: #a1a1aa;
+            line-height: 1.6;
+        }
+
+        button {
+            margin-top: 20px;
+
+            padding: 13px 24px;
+
+            border: 0;
+            border-radius: 10px;
+
+            background: #ffffff;
+            color: #09090b;
+
+            font-size: 16px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>No Internet Connection</h1>
+
+        <p>
+            Opringo couldn't connect right now.
+            Please check your internet connection
+            and try again.
+        </p>
+
+        <button onclick="location.reload()">
+            Try Again
+        </button>
+
+    </div>
+
+</body>
+
+</html>
