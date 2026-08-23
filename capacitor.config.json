@@ -1,7 +1,8 @@
 {
   "appId": "com.social.opringo",
   "appName": "Opringo",
-  "webDir": "dist",
+  "webDir": "www",
+
   "plugins": {
     "SplashScreen": {
       "launchAutoHide": false,
