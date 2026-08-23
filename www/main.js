@@ -8,4 +8,4 @@ setTimeout(() => {
 
     window.location.href = OPRINGO_URL;
 
-}, 500);
+}, 500); 
