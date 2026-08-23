@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Opringo — Offline</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background: #09090b;
+            color: #ffffff;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .icon {
+            width: 72px;
+            height: 72px;
+
+            margin: 0 auto 24px;
+
+            border-radius: 20px;
+
+            background: #18181b;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 34px;
+
+            border: 1px solid #27272a;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0;
+
+            color: #a1a1aa;
+
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .retry {
+            margin-top: 28px;
+
+            width: 100%;
+
+            padding: 14px 20px;
+
+            border: 0;
+            border-radius: 12px;
+
+            background: #ffffff;
+            color: #09090b;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .retry:active {
+            transform: scale(0.98);
+        }
+
+        .status {
+            margin-top: 16px;
+
+            font-size: 12px;
+            color: #71717a;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="icon">
+            📡
+        </div>
+
+        <h1>No internet connection</h1>
+
+        <p>
+            Opringo needs an internet connection
+            to get you online.
+        </p>
+
+        <button
+            class="retry"
+            onclick="retryConnection()"
+        >
+            Try again
+        </button>
+
+        <div
+            class="status"
+            id="status"
+        ></div>
+
+    </div>
+
+    <script>
+
+        function retryConnection() {
+
+            const status =
+                document.getElementById('status');
+
+            status.textContent = 'Checking connection...';
+
+            setTimeout(() => {
+
+                if (navigator.onLine) {
+
+                    window.location.replace('./index.html');
+
+                } else {
+
+                    status.textContent =
+                        'Still offline. Please check your connection.';
+
+                }
+
+            }, 500);
+
+        }
+
+    </script>
+
+</body>
+
+</html>

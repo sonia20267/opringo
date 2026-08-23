@@ -1,12 +1,32 @@
 const OPRINGO_URL = 'https://www.opringo.com/index';
 
-async function launchOpringo() {
+async function hideSplash() {
 
     try {
 
-        const network = await Capacitor.Plugins.Network.getStatus();
+        await Capacitor.Plugins.SplashScreen.hide();
+
+        console.log('[Opringo] Splash hidden.');
+
+    } catch (error) {
+
+        console.error('[Opringo] Splash hide error:', error);
+
+    }
+}
+
+
+async function launchOpringo() {
+
+    console.log('[Opringo] Launcher started.');
+
+    try {
+
+        const network =
+            await Capacitor.Plugins.Network.getStatus();
 
         console.log('[Opringo] Network:', network);
+
 
         // ---------------------------------------------------------
         // OFFLINE
@@ -16,29 +36,35 @@ async function launchOpringo() {
 
             console.log('[Opringo] Device is offline.');
 
-            window.location.href('./offline.html');
+            await hideSplash();
+
+            window.location.replace('./offline.html');
 
             return;
         }
+
 
         // ---------------------------------------------------------
         // ONLINE
         // ---------------------------------------------------------
 
         console.log('[Opringo] Device is online.');
-        console.log('[Opringo] Launching Opringo...');
 
-        window.location.href(OPRINGO_URL);
+        await hideSplash();
+
+        console.log('[Opringo] Opening Opringo inside app...');
+
+        window.location.href = OPRINGO_URL;
 
     } catch (error) {
 
-        console.error(
-            '[Opringo] Launch error:',
-            error
-        );
+        console.error('[Opringo] Launch error:', error);
 
-        window.location.href('./offline.html');
+        await hideSplash();
+
+        window.location.replace('./offline.html');
     }
 }
+
 
 launchOpringo();
