@@ -6,12 +6,15 @@ async function launchOpringo() {
 
     try {
 
-        const network =
-            await Capacitor.Plugins.Network.getStatus();
+        const connected = navigator.onLine;
 
-        console.log('[Opringo] Network:', network);
+        console.log('[Opringo] Online:', connected);
 
-        if (!network.connected) {
+        // ---------------------------------------------------------
+        // OFFLINE
+        // ---------------------------------------------------------
+
+        if (!connected) {
 
             console.log('[Opringo] Device is offline.');
 
@@ -20,8 +23,12 @@ async function launchOpringo() {
             return;
         }
 
+        // ---------------------------------------------------------
+        // ONLINE
+        // ---------------------------------------------------------
+
         console.log('[Opringo] Device is online.');
-        console.log('[Opringo] Opening Opringo...');
+        console.log('[Opringo] Opening Opringo inside app...');
 
         window.location.href = OPRINGO_URL;
 
