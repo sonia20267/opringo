@@ -5,7 +5,7 @@
 
   "plugins": {
     "SplashScreen": {
-      "launchAutoHide": false,
+      "launchAutoHide": true,
       "backgroundColor": "#09090b",
       "showSpinner": false,
       "androidScaleType": "CENTER_CROP"
