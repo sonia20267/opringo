@@ -2,7 +2,12 @@
   "appId": "com.social.opringo",
   "appName": "Opringo",
   "webDir": "www",
-
+  "server": {
+    "allowNavigation": [
+      "www.opringo.com",
+      "*.opringo.com"
+    ]
+  },
   "plugins": {
     "SplashScreen": {
       "launchAutoHide": true,
